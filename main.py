@@ -1,31 +1,23 @@
-from flask import Flask, make_response, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+
+from Controllers.ativos import get_ativos, createAtivos
+from flask import Flask, make_response, jsonify, request 
+from sqlalchemy.orm import Session
 from bd import dadosAtivos
+from Models.schema import Ativos
+from Models.database import engine
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moreu.db'
-app.config['SQLALCHEMY_ECHO'] = True
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
 app.config['JSON_SORT_KEYS'] = False
 
 @app.route('/ativos', methods = ['GET'])
-def get_ativos():
-  return make_response (
-   jsonify(dadosAtivos) 
-   )
+def execute1():
+    get_ativos()
 
 @app.route('/ativos', methods = ['POST'])
-def createAtivos():
-  ativo = request.json
-  dadosAtivos.append(ativo)
-  return make_response(
-    jsonify(ativo)
-  )
-
+def execute2():
+  get_json = request.json()
+  createAtivos(get_json)
 #Consultar por ID
 @app.route('/ativos/<int:id>', methods=['GET'])
 def obterAtivosPorID(id):
@@ -51,4 +43,4 @@ def excluirAtivos(id):
       return jsonify(dadosAtivos)
 
 
-app.run()
+app.run(port = 5000, host = 'localhost', debug = True)
