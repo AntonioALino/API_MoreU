@@ -1,10 +1,8 @@
 
-from Controllers.ativos import get_ativos, createAtivos
-from flask import Flask, make_response, jsonify, request 
-from sqlalchemy.orm import Session
+from Controllers.ativos import get_ativos, createAtivos, excluirAtivos
+from flask import Flask, jsonify, request
 from bd import dadosAtivos
-from Models.schema import Ativos
-from Models.database import engine
+
 
 app = Flask(__name__)
 
@@ -12,12 +10,14 @@ app.config['JSON_SORT_KEYS'] = False
 
 @app.route('/ativos', methods = ['GET'])
 def execute1():
-    get_ativos()
+    return get_ativos()
 
 @app.route('/ativos', methods = ['POST'])
 def execute2():
-  get_json = request.json()
-  createAtivos(get_json)
+
+  req = request.data
+
+  return createAtivos(req)
 #Consultar por ID
 @app.route('/ativos/<int:id>', methods=['GET'])
 def obterAtivosPorID(id):
@@ -34,13 +34,9 @@ def editarAtivos():
       return jsonify(dadosAtivos[indice])
 
 #Excluir
-@app.route('/ativos/<int:id>', methods=['DELETE'])
-def excluirAtivos(id):
-  for indice, ativo in enumerate(dadosAtivos):
-    if ativo.get('id' == id):
-      del dadosAtivos[indice]
+@app.route('/ativos/<id>',methods=['DELETE'])
 
-      return jsonify(dadosAtivos)
-
+def execute3(id):
+  return excluirAtivos(id)
 
 app.run(port = 5000, host = 'localhost', debug = True)
