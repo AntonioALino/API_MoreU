@@ -7,7 +7,7 @@ clientes = Blueprint('clientes',__name__)
 def execute1():
     return get_clientes()
 
-@clientes.route('/ativos', methods = ['POST'])
+@clientes.route('/clientes', methods = ['POST'])
 def execute2():
 
   req = request.data
@@ -15,13 +15,13 @@ def execute2():
   return createClientes(req)
 
 #Editar
-@clientes.route('/clientes/', methods=['PUT'])
+@clientes.route('/clientes', methods=['PUT'])
 def execute4():
   req = request.data
   return updateClientes(req)
 
 #Excluir
-@clientes.route('/ativos/<id>',methods=['DELETE'])
+@clientes.route('/clientes/<id>',methods=['DELETE'])
 
 def execute3(id):
   return excluirClientes(id)

@@ -9,17 +9,17 @@ def get_clientes():
   try:
    with Session(engine) as session:
  
-     Clientes = select(Clientes)
+     clientes = select(Clientes)
 
      jsonClientes = []
 
-     for ativo in session.scalars(Clientes):
+     for cliente in session.scalars(clientes):
        jsonClientes.append({
-        "id": int(ativo.id),
-        "nome": str(ativo.nome),
-        "email": int(ativo.email),
-        "contato": str(ativo.contato),
-        "nomeEmpresa": str(ativo.nomeEmpresa)
+        "id": int(cliente.id),
+        "nome": str(cliente.nome),
+        "email": str(cliente.email),
+        "contato": str(cliente.contato),
+        "nomeEmpresa": str(cliente.nomeEmpresa)
        
        })
      response = make_response (
@@ -44,8 +44,12 @@ def createClientes(form):
   try:
    with Session(engine) as session:
  
-     Clientes = Clientes(nome = form_get["nome"], email = form_get["email"], contato=form_get["contato"], nomeEmpresa=form_get["nomeEmpresa"])
-     session.add(Clientes)
+     cliente = Clientes(nome = form_get["nome"], 
+                        email = form_get["email"], 
+                        contato=form_get["contato"], 
+                        nomeEmpresa=form_get["nomeEmpresa"])
+     
+     session.add(cliente)
      session.commit()
      response = make_response (
        jsonify({"created" : True}), 201
@@ -64,11 +68,11 @@ def createClientes(form):
 
     return response
   
-def excluirClientes(idAtivo):
+def excluirClientes(idCliente):
   try:
    with Session(engine) as session:
  
-     delete_itens = delete(Clientes).where(Clientes.id == idAtivo)
+     delete_itens = delete(Clientes).where(Clientes.id == idCliente)
 
      exec_del = session.execute(delete_itens)
 
