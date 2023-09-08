@@ -16,8 +16,10 @@ def get_ativos():
      for ativo in session.scalars(ativos):
        jsonAtivos.append({
         "id": int(ativo.id),
+        "dataCadastroProduto": str(ativo.dataCadastroProduto),
         "nomeProduto": str(ativo.nomeProduto),
         "qntProduto": int(ativo.qntProduto),
+        "valorPagoProduto": float(ativo.valorPagoProduto),
         "tipoProduto": str(ativo.tipoProduto),
         "descricaoProduto": str(ativo.descricaoProduto)
        
@@ -39,12 +41,14 @@ def get_ativos():
 
     return response
 
+
+
 def createAtivos(form):
   form_get = loads(form)
   try:
    with Session(engine) as session:
  
-     ativos = Ativos(nomeProduto = form_get["nomeProduto"], qntProduto = form_get["qntProduto"], tipoProduto=form_get["tipoProduto"], descricaoProduto=form_get["descricaoProduto"])
+     ativos = Ativos(dataCadastroProduto = form_get["dataCadastroProduto"], nomeProduto = form_get["nomeProduto"], qntProduto = form_get["qntProduto"], valorPagoProduto = form_get["valorPagoProduto"], tipoProduto=form_get["tipoProduto"], descricaoProduto=form_get["descricaoProduto"])
      session.add(ativos)
      session.commit()
      response = make_response (
@@ -64,6 +68,8 @@ def createAtivos(form):
 
     return response
   
+
+
 def excluirAtivos(idAtivo):
   try:
    with Session(engine) as session:
@@ -91,6 +97,8 @@ def excluirAtivos(idAtivo):
 
     return response
   
+
+
 def updateAtivos(form):
   form_get = loads(form)
   try:
@@ -98,8 +106,10 @@ def updateAtivos(form):
       update_itens = (
       update(Ativos)
       .where(Ativos.id == form_get['id'])
-      .values(nomeProduto = form_get['nomeProduto'], 
-              qntProduto = form_get['qntProduto'], 
+      .values(dataCadastroProduto = form_get["dataCadastroProduto"],
+              nomeProduto = form_get['nomeProduto'], 
+              qntProduto = form_get['qntProduto'],
+              valorPagoProduto = form_get["valorPagoProduto"], 
               tipoProduto = form_get['tipoProduto'], 
               descricaoProduto = form_get['descricaoProduto']))
     

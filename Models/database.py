@@ -1,9 +1,8 @@
-# from flask import Flask, make_response, jsonify, request
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import os
 
-env = load_dotenv(".env")
+load_dotenv(find_dotenv())
 
-engine = create_engine(os.environ.get('URL'), echo=True)
 
+engine = create_engine(os.environ.get("URL"), echo=True)
