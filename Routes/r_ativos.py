@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from Controllers.ativos import get_ativos, createAtivos, excluirAtivos, updateAtivos
+from Controllers.ativos import get_ativos, createAtivos, excluirAtivos, updateAtivos, selectById
 
 ativos = Blueprint('ativos', __name__)
 
@@ -25,3 +25,7 @@ def execute4():
 @ativos.route('/ativos/<id>', methods=['DELETE'])
 def execute3(id):
     return excluirAtivos(id)
+
+@ativos.route('/ativos/<id>', methods=['GET'])
+def execute5(id):
+    return selectById(id)

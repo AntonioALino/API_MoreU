@@ -4,6 +4,7 @@ from sqlalchemy import select, delete, update
 from Models.schema import Ativos
 from Models.database import engine
 from json import loads
+import bcrypt
 
 def get_ativos(): 
   try:
@@ -118,6 +119,34 @@ def updateAtivos(form):
     
     response = make_response(
       jsonify({'affectedRows': exec_up.rowcount}), 200
+    )
+    return response
+
+  except OSError:
+    response = make_response (
+       jsonify({"error": OSError}), 500
+
+     )
+    response.headers["Content-Type"] = "application/json"
+
+    return response
+  
+def selectById(id):
+  try:
+    with Session(engine) as session:
+      queryRecept = select(Ativos).where(Ativos.id == id)
+    
+    exec_select = session.execute(queryRecept).first()
+    response = make_response(
+       jsonify({
+         "id": int(exec_select[0].id),
+        "dataCadastroProduto": str(exec_select[0].dataCadastroProduto),
+        "nomeProduto": str(exec_select[0].nomeProduto),
+        "qntProduto": int(exec_select[0].qntProduto),
+        "valorPagoProduto": float(exec_select[0].valorPagoProduto),
+        "tipoProduto": str(exec_select[0].tipoProduto),
+        "descricaoProduto": str(exec_select[0].descricaoProduto)
+       }), 200
     )
     return response
 
