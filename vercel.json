@@ -8,8 +8,12 @@
   ],
   "routes": [
     {
-      "src": "./(.*)",
-      "dest": "./"
+      "src": "/ativos",
+      "dest": "./main.py"
+    },
+    {
+      "src": "/clientes",
+      "dest": "/main.py"
     }
   ]
 }
