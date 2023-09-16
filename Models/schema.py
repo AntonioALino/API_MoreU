@@ -33,18 +33,27 @@ class Clientes(Base):
     __tablename__ = 'clientes'
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(60))
+<<<<<<< HEAD
     email = Column(String(30))
     senha = Column(String(120))
+=======
+    email = Column(String(30), unique=True)
+>>>>>>> 238705c34f15f03e0f503af19ab0f94435c2cd68
     contato = Column(Integer)
     nomeEmpresa = Column(String(60))
+    password = Column(String(200))
 
+<<<<<<< HEAD
     def __init__(self, nome=None, email=None, senha=None, contato=None, nomeEmpresa=None):
+=======
+    def __init__(self, nome=None, email=None, contato=None, nomeEmpresa=None, password=None):
+>>>>>>> 238705c34f15f03e0f503af19ab0f94435c2cd68
         self.nome = nome
         self.email = email
         self.senha = senha
         self.contato = contato
         self.nomeEmpresa = nomeEmpresa
-
+        self.password = password
 
 class Fornecedores(Base):
 

@@ -5,7 +5,8 @@ from sqlalchemy import select, delete, update
 from Models.schema import Clientes
 from Models.database import engine
 from json import loads
-
+from bcrypt import gensalt, hashpw
+from sqlalchemy.exc import IntegrityError
 def get_clientes(): 
   try:
    with Session(engine) as session:
@@ -42,35 +43,30 @@ def get_clientes():
 
 def createClientes(form):
   form_get = loads(form)
-  salt = gensalt()
-  hashed = hashpw(form_get["password"].encode("utf-8"), salt)
-  try:
-   with Session(engine) as session:
+  with Session(engine) as session:
+     password = form_get["password"].encode("utf8")
+     salt = gensalt()
+     hash = hashpw(password, salt)
  
      cliente = Clientes(nome = form_get["nome"], 
                         email = form_get["email"],
-                        senha = hashed,
                         contato=form_get["contato"], 
-                        nomeEmpresa=form_get["nomeEmpresa"])
+                        nomeEmpresa=form_get["nomeEmpresa"],
+                        password = hash)
      
      session.add(cliente)
-     session.commit()
-     response = make_response (
-       jsonify({"created" : True}), 201
+     try:
+      session.commit()
+      response = make_response (
+        jsonify({"created" : True}), 201
 
-     )
-   response.headers["Content-Type"] = "application/json"
+      )
+      response.headers["Content-Type"] = "application/json"
 
-   return response
-
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
-
-     )
-    response.headers["Content-Type"] = "application/json"
-
-    return response
+      return response
+     except IntegrityError:
+       session.rollback()
+       return make_response({"error": "This email is already being used"}, 409)
   
 def excluirClientes(idCliente):
   try:
@@ -116,6 +112,39 @@ def updateClientes(form):
     
     response = make_response(
       jsonify({'affectedRows': exec_up.rowcount}), 200
+    )
+    return response
+
+  except OSError:
+    response = make_response (
+       jsonify({"error": OSError}), 500
+
+     )
+    response.headers["Content-Type"] = "application/json"
+
+    return response
+  
+  
+def login(email, password):
+  try:
+    with Session(engine) as session:
+      queryRecept = select(Clientes).where(Clientes.email == email)
+    
+    exec_select = session.execute(queryRecept).first()
+
+    if (exec_select.count > 0):
+      if (exec_select[0].password):
+        pass
+    response = make_response(
+       jsonify({
+         "id": int(exec_select[0].id),
+        "dataCadastroProduto": str(exec_select[0].dataCadastroProduto),
+        "nomeProduto": str(exec_select[0].nomeProduto),
+        "qntProduto": int(exec_select[0].qntProduto),
+        "valorPagoProduto": float(exec_select[0].valorPagoProduto),
+        "tipoProduto": str(exec_select[0].tipoProduto),
+        "descricaoProduto": str(exec_select[0].descricaoProduto)
+       }), 200
     )
     return response
 

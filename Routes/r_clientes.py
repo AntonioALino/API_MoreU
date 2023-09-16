@@ -1,5 +1,7 @@
+import json
 from Controllers.clientes import get_clientes, createClientes, excluirClientes, updateClientes
-from flask import Flask, request, Blueprint
+from flask import jsonify, render_template, request, Blueprint
+from werkzeug.exceptions import HTTPException
 
 clientes = Blueprint('clientes',__name__)
 
@@ -25,3 +27,4 @@ def execute4():
 
 def execute3(id):
   return excluirClientes(id)
+
