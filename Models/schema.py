@@ -41,7 +41,6 @@ class Clientes(Base):
     def __init__(self, nome=None, email=None, contato=None, nomeEmpresa=None, password=None):
         self.nome = nome
         self.email = email
-        self.senha = senha
         self.contato = contato
         self.nomeEmpresa = nomeEmpresa
         self.password = password

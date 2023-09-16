@@ -6,7 +6,7 @@ API feita para estudos do projeto da faculdade com o intuito de realizar o contr
 
 - Gerar relatório de um controle de ativos
 - Monitoramento em tempo real dos ativos da empresa
-- Obter e adicionar informações de ativos da empresa
+- Obter e adicionar informações de ativos da empresa 
 
 ## Funcionalidades do Case:
 
