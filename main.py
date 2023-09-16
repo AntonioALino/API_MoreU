@@ -12,6 +12,3 @@ app.config['JSON_SORT_KEYS'] = False
 app.register_blueprint(ativos)
 
 app.register_blueprint(clientes)
-
-
-app.run(port=5000, host='localhost', debug=True)
