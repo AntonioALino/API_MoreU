@@ -57,7 +57,7 @@ to Markdown converter
 And of course Dillinger itself is open source with a [public repository][dill]
  on GitHub.
 
-## Installation
+## Installation 
 
 Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
 
