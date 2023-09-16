@@ -34,12 +34,14 @@ class Clientes(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(60))
     email = Column(String(30))
+    senha = Column(String(120))
     contato = Column(Integer)
     nomeEmpresa = Column(String(60))
 
-    def __init__(self, nome=None, email=None, contato=None, nomeEmpresa=None):
+    def __init__(self, nome=None, email=None, senha=None, contato=None, nomeEmpresa=None):
         self.nome = nome
         self.email = email
+        self.senha = senha
         self.contato = contato
         self.nomeEmpresa = nomeEmpresa
 

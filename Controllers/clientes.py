@@ -1,3 +1,4 @@
+from bcrypt import gensalt, hashpw
 from flask import make_response, jsonify
 from sqlalchemy.orm import Session
 from sqlalchemy import select, delete, update
@@ -41,11 +42,14 @@ def get_clientes():
 
 def createClientes(form):
   form_get = loads(form)
+  salt = gensalt()
+  hashed = hashpw(form_get["password"].encode("utf-8"), salt)
   try:
    with Session(engine) as session:
  
      cliente = Clientes(nome = form_get["nome"], 
-                        email = form_get["email"], 
+                        email = form_get["email"],
+                        senha = hashed,
                         contato=form_get["contato"], 
                         nomeEmpresa=form_get["nomeEmpresa"])
      
