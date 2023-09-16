@@ -5,4 +5,4 @@ import os
 load_dotenv(find_dotenv())
 
 
-engine = create_engine(os.environ.get("URL"), echo=True)
+engine = create_engine(os.environ.get("URL"), echo=True, )
