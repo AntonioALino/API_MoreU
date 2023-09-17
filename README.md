@@ -36,14 +36,13 @@ Para realizar a instalação, primeiro, clone o repositório em sua máquina:
 ### Clonando o repositório
 
 ```
-$ git clone https://github.com/AntonioALino/API_MoreU.git
-
+git clone https://github.com/AntonioALino/API_MoreU.git
 ```
 
 Acesse a pasta:
 
 ```
-$ cd API_MoreU
+cd API_MoreU
 ```
 
 ### Configurando o ambiente
@@ -51,8 +50,7 @@ $ cd API_MoreU
 Agora, iremos criar um ambiente de desenvolvimento python com o seguinte comando:
 
 ```
-$ python -m venv .venv
-
+python -m venv .venv
 ```
 
 Então vamos acessar esse ambiente que acabamos de criar:
@@ -65,7 +63,6 @@ Vamos também instalar todas as dependências:
 
 ```
 pip install -r requirements.txt
-
 ```
 
 Também importe o arquivo ```dump.sql``` em seu servidor MySQL.
