@@ -23,173 +23,84 @@ API feita para estudos do projeto da faculdade com o intuito de realizar o contr
 - Sistema CRUD completo e semântico 
 - Restful API utilizando ORM 
 
+## Stack
+
+![Stack](https://img.shields.io/badge/python-f7d44c?logo=python&logoColor=2f6592&style=for-the-badge) ![Stack](https://img.shields.io/badge/Flask-black?logo=flask&logoColor=white&style=for-the-badge) ![Stack](https://img.shields.io/badge/sqlachemy-d31c00?logo=sqlalchemy&logoColor=white&style=for-the-badge)  ![Stack](https://img.shields.io/badge/mysql-5a839c?logo=mysql&logoColor=white&style=for-the-badge) ![Stack](https://img.shields.io/badge/git-e05d44?logo=git&logoColor=white&style=for-the-badge)
 
 
 
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
+## Instalação
 
-This text you see here is *actually- written in Markdown! To get a feel
-for Markdown's syntax, type some text into the left window and
-watch the results in the right.
+Para realizar a instalação, primeiro, clone o repositório em sua máquina:
 
-## Stack Utilizada
+### Clonando o repositório
 
-As tecnologias que utilizamos foram:
+```
+$ git clone https://github.com/AntonioALino/API_MoreU.git
 
-![Static Badge](https://img.shields.io/badge/:badgeContent?style=flat&logo=python&logoColor=yellow&label=python&labelColor=white&color=black)
-
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-to Markdown converter
-- [jQuery] - duh
-
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
-
-## Installation 
-
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-cd dillinger
-npm i
-node app
 ```
 
-For production environments...
+Acesse a pasta:
 
-```sh
-npm install --production
-NODE_ENV=production node app
+```
+$ cd API_MoreU
 ```
 
-## Plugins
+### Configurando o ambiente
 
-Dillinger is currently extended with the following plugins.
-Instructions on how to use them in your own application are linked below.
+Agora, iremos criar um ambiente de desenvolvimento python com o seguinte comando:
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+```
+$ python -m venv .venv
 
-## Development
-
-Want to contribute? Great!
-
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
-
-Open your favorite Terminal and run these commands.
-
-First Tab:
-
-```sh
-node app
 ```
 
-Second Tab:
+Então vamos acessar esse ambiente que acabamos de criar:
 
-```sh
-gulp watch
+```
+source .venv/bin/activate
 ```
 
-(optional) Third:
+Vamos também instalar todas as dependências:
 
-```sh
-karma test
+```
+pip install -r requirements.txt
+
 ```
 
-#### Building for source
+Também importe o arquivo ```dump.sql``` em seu servidor MySQL.
 
-For production release:
 
-```sh
-gulp build --prod
+Por fim, você precisará criar/editar o arquivo ```.env``` presente na raiz do projeto, adicionando suas credenciais de conexão com o banco de dados:
+
+```env
+URL=mysql+mysqlconnector://usuário do banco:senha do banco@servidor do banco/moreu
 ```
 
-Generating pre-built zip archives for distribution:
+Pronto! O projeto está pronto para ser testado!
 
-```sh
-gulp build dist --prod
+
+## Testando
+
+Execute o código em seu editor favorito, ou rode o seguinte comando no terminal:
+
+```
+flask --app main.py
 ```
 
-## Docker
+Você também pode testar online, com uma interface gráfica acessando o seguinte link:
 
-Dillinger is very easy to install and deploy in a Docker container.
+https://moreu-frontend.vercel.app
 
-By default, the Docker will expose port 8080, so change this within the
-Dockerfile if necessary. When ready, simply use the Dockerfile to
-build the image.
 
-```sh
-cd dillinger
-docker build -t <youruser>/dillinger:${package.json.version} .
-```
+## Modelo Relacional e lógico
 
-This will create the dillinger image and pull in the necessary dependencies.
-Be sure to swap out `${package.json.version}` with the actual
-version of Dillinger.
 
-Once done, run the Docker image and map the port to whatever you wish on
-your host. In this example, we simply map port 8000 of the host to
-port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
+Modelo Relacional:
 
-```sh
-docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
-```
+![Modelo Relacional](docs/relational_model.png)
 
-> Note: `--capt-add=SYS-ADMIN` is required for PDF rendering.
 
-Verify the deployment by navigating to your server address in
-your preferred browser.
+Modelo Lógico:
 
-```sh
-127.0.0.1:8000
-```
-
-## License
-
-MIT
-
-**Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
+![Modelo Relacional](docs/logic_model.png)
