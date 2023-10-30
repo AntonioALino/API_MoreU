@@ -4,158 +4,168 @@ from sqlalchemy import select, delete, update
 from Models.schema import Ativos
 from Models.database import engine
 from json import loads
-import bcrypt
 
-def get_ativos(): 
-  try:
-   with Session(engine) as session:
- 
-     ativos = select(Ativos)
 
-     jsonAtivos = []
+def get_ativos():
+    try:
+        with Session(engine) as session:
 
-     for ativo in session.scalars(ativos):
-       jsonAtivos.append({
-        "id": int(ativo.id),
-        "dataCadastroProduto": str(ativo.dataCadastroProduto),
-        "nomeProduto": str(ativo.nomeProduto),
-        "qntProduto": int(ativo.qntProduto),
-        "valorPagoProduto": float(ativo.valorPagoProduto),
-        "tipoProduto": str(ativo.tipoProduto),
-        "descricaoProduto": str(ativo.descricaoProduto)
-       
-       })
-     response = make_response (
-      jsonify(jsonAtivos),
-        
-     )
-     response.headers["Content-Type"] = "application/json"
+            ativos = select(Ativos)
 
-     return response
-  
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
+            jsonAtivos = []
 
-     )
-    response.headers["Content-Type"] = "application/json"
+            for ativo in session.scalars(ativos):
+                jsonAtivos.append({
+                    "id": int(ativo.id),
+                    "dataCadastroProduto": str(ativo.dataCadastroProduto),
+                    "nomeProduto": str(ativo.nomeProduto),
+                    "qntProduto": int(ativo.qntProduto),
+                    "valorPagoProduto": float(ativo.valorPagoProduto),
+                    "tipoProduto": str(ativo.tipoProduto),
+                    "descricaoProduto": str(ativo.descricaoProduto)
 
-    return response
+                })
+            response = make_response(
+                jsonify(jsonAtivos), 200
 
+            )
+            response.headers["Content-Type"] = "application/json"
+
+            return response
+
+    except OSError:
+        response = make_response(
+            jsonify({"error": OSError}), 500
+
+        )
+        response.headers["Content-Type"] = "application/json"
+
+        return response
 
 
 def createAtivos(form):
-  form_get = loads(form)
-  try:
-   with Session(engine) as session:
- 
-     ativos = Ativos(dataCadastroProduto = form_get["dataCadastroProduto"], nomeProduto = form_get["nomeProduto"], qntProduto = form_get["qntProduto"], valorPagoProduto = form_get["valorPagoProduto"], tipoProduto=form_get["tipoProduto"], descricaoProduto=form_get["descricaoProduto"])
-     session.add(ativos)
-     session.commit()
-     response = make_response (
-       jsonify({"created" : True}), 201
+    form_get = loads(form)
+    try:
+        with Session(engine) as session:
 
-     )
-   response.headers["Content-Type"] = "application/json"
+            ativos = Ativos(dataCadastroProduto=form_get["dataCadastroProduto"],
+                            nomeProduto=form_get["nomeProduto"],
+                            qntProduto=form_get["qntProduto"],
+                            valorPagoProduto=form_get["valorPagoProduto"],
+                            tipoProduto=form_get["tipoProduto"],
+                            descricaoProduto=form_get["descricaoProduto"])
+            session.add(ativos)
+            session.commit()
+            response = make_response(
+                "", 201
 
-   return response
+            )
+        response.headers["Content-Type"] = "application/json"
 
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
+        return response
 
-     )
-    response.headers["Content-Type"] = "application/json"
+    except OSError:
+        response = make_response(
+            jsonify({"error": OSError}), 500
 
-    return response
-  
+        )
+        response.headers["Content-Type"] = "application/json"
+
+        return response
 
 
 def excluirAtivos(idAtivo):
-  try:
-   with Session(engine) as session:
- 
-     delete_itens = delete(Ativos).where(Ativos.id == idAtivo)
+    try:
+        with Session(engine) as session:
 
-     exec_del = session.execute(delete_itens)
+            delete_itens = delete(Ativos).where(Ativos.id == idAtivo)
 
-     session.commit()
+            exec_del = session.execute(delete_itens)
 
-     response = make_response (
-      jsonify({'affectedRows': exec_del.rowcount}), 202
-        
-     )
-     response.headers["Content-Type"] = "application/json"
+            session.commit()
 
-     return response
-  
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
+            if (exec_del.rowcount == 0):
+                return make_response("", 204)
 
-     )
-    response.headers["Content-Type"] = "application/json"
+            response = make_response(
+                "", 200
 
-    return response
-  
+            )
+            response.headers["Content-Type"] = "application/json"
+
+            return response
+
+    except OSError:
+        response = make_response(
+            jsonify({"error": OSError}), 500
+
+        )
+        response.headers["Content-Type"] = "application/json"
+
+        return response
 
 
 def updateAtivos(form):
-  form_get = loads(form)
-  try:
-    with Session(engine) as session:
-      update_itens = (
-      update(Ativos)
-      .where(Ativos.id == form_get['id'])
-      .values(dataCadastroProduto = form_get["dataCadastroProduto"],
-              nomeProduto = form_get['nomeProduto'], 
-              qntProduto = form_get['qntProduto'],
-              valorPagoProduto = form_get["valorPagoProduto"], 
-              tipoProduto = form_get['tipoProduto'], 
-              descricaoProduto = form_get['descricaoProduto']))
-    
-    exec_up = session.execute(update_itens)
-    session.commit()
-    
-    response = make_response(
-      jsonify({'affectedRows': exec_up.rowcount}), 200
-    )
-    return response
+    form_get = loads(form)
+    try:
+        with Session(engine) as session:
+            update_itens = (
+                update(Ativos)
+                .where(Ativos.id == form_get['id'])
+                .values(dataCadastroProduto=form_get["dataCadastroProduto"],
+                        nomeProduto=form_get['nomeProduto'],
+                        qntProduto=form_get['qntProduto'],
+                        valorPagoProduto=form_get["valorPagoProduto"],
+                        tipoProduto=form_get['tipoProduto'],
+                        descricaoProduto=form_get['descricaoProduto']))
 
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
+        exec_up = session.execute(update_itens)
+        session.commit()
 
-     )
-    response.headers["Content-Type"] = "application/json"
+        if (exec_up.rowcount == 0):
+            return make_response("", 204) 
 
-    return response
-  
+        return make_response("", 200)
+
+    except OSError:
+        response = make_response(
+            jsonify({"error": OSError}), 500
+
+        )
+        response.headers["Content-Type"] = "application/json"
+
+        return response
+
+
 def selectById(id):
-  try:
-    with Session(engine) as session:
-      queryRecept = select(Ativos).where(Ativos.id == id)
-    
-    exec_select = session.execute(queryRecept).first()
-    response = make_response(
-       jsonify({
-         "id": int(exec_select[0].id),
-        "dataCadastroProduto": str(exec_select[0].dataCadastroProduto),
-        "nomeProduto": str(exec_select[0].nomeProduto),
-        "qntProduto": int(exec_select[0].qntProduto),
-        "valorPagoProduto": float(exec_select[0].valorPagoProduto),
-        "tipoProduto": str(exec_select[0].tipoProduto),
-        "descricaoProduto": str(exec_select[0].descricaoProduto)
-       }), 200
-    )
-    return response
+    try:
+        with Session(engine) as session:
+            queryRecept = select(Ativos).where(Ativos.id == id)
 
-  except OSError:
-    response = make_response (
-       jsonify({"error": OSError}), 500
+        exec_select = session.execute(queryRecept).first()
 
-     )
-    response.headers["Content-Type"] = "application/json"
+        if not exec_select:
+            return make_response("", 204)
 
-    return response
-  
+        else:
+
+            response = make_response(
+                jsonify({
+                    "id": int(exec_select[0].id),
+                    "dataCadastroProduto": str(exec_select[0].dataCadastroProduto),
+                    "nomeProduto": str(exec_select[0].nomeProduto),
+                    "qntProduto": int(exec_select[0].qntProduto),
+                    "valorPagoProduto": float(exec_select[0].valorPagoProduto),
+                    "tipoProduto": str(exec_select[0].tipoProduto),
+                    "descricaoProduto": str(exec_select[0].descricaoProduto)
+                }), 200
+            )
+            return response
+
+    except OSError:
+        response = make_response(
+            jsonify({"error": OSError}), 500
+
+        )
+
+        return response
