@@ -116,7 +116,7 @@ Rota utilizada para edição de ativos,
 
 ##### Parâmetros
 
-| Nome    | Localizado em | Descrição         | Requirido | Esquema           |
+| Nome    | Localizado em | Descrição         | Requirido | Esquema        |
 | ------- | ---------- | ------------------- | -------- | ---------------- |
 | payload | body       | Corpo da requisição | Sim      | Ativos
 
@@ -172,7 +172,7 @@ Rota utilizada para remoção de ativos,
 
 | Nome | Localizado em | Descrição | Requerido | Tipo |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path | Id referente ao ativo a ser deletado | Yes | string |
+| id | path | Id referente ao ativo a ser deletado | Sim | string |
 
 ##### Respostas
 
@@ -183,151 +183,154 @@ Rota utilizada para remoção de ativos,
 | 500 | Erro no servidor | Server Error |
 
 #### GET
-##### Description:
+##### Descrição:
 
 Rota utilizada para busca de um único ativo tendo como base seu ID,
                                é necessário inserir o ID referente ao ativo a ser buscado
 
-##### Parameters
+##### Parâmetros
 
-| Name | Located in | Description | Required | Schema |
+| Nome | Localizado em | Descrição | Requirido | Tipo |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | Id referente ao ativo a ser buscado | Sim | string |
 
-##### Responses
+##### Respostas
 
-| Code | Description | Schema |
+| Código | Descrição | Esquema |
 | ---- | ----------- | ------ |
-| 200 | Buscado com sucesso! | [Ativos%20com%20os%20campos](#Ativos%20com%20os%20campos) |
-| 204 | Sem conteúdo |  |
-| 500 | Erro no servidor | [ServerError](#ServerError) |
+| 200 | Buscado com sucesso! | Ativos |
+| 204 | Sem conteúdo |
+| 500 | Erro no servidor | Server Error |
 
 ### /clientes/
 
 #### PUT
-##### Description:
+##### Descrição:
 
 Rota utilizada para edição de clientes,
                                  nela é necessário informar os dados referentes ao cliente a ser editado
 
-##### Parameters
+##### Parâmetros
 
-| Name | Located in | Description | Required | Schema |
+| Nome | Localizado em | Descrição | Requirido | Esquema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| payload | body |  | Yes | [cliente%20com%20todos%20os%20campos](#cliente%20com%20todos%20os%20campos) |
+| payload | body | Novos dados do cliente a ser atualizado | Sim | Clientes |
 
-##### Responses
+##### Respostas
 
-| Code | Description | Schema |
+| Código | Descrição | Esquema |
 | ---- | ----------- | ------ |
-| 200 | Alterado com sucesso! |  |
-| 204 | Sem conteúdo |  |
-| 409 | Conflito. Email já cadastrado |  |
-| 500 | Erro no servidor | [ServerError](#ServerError) |
+| 200 | Alterado com sucesso! |
+| 204 | Sem conteúdo |
+| 409 | Conflito. Email já cadastrado |
+| 500 | Erro no servidor | ServerError |
 
 #### POST
-##### Description:
+##### Descrição:
 
 Rota utilizada para cadastro de clientes,
                                  nela é necessário informar os dados referentes ao cliente a ser cadastro
 
-##### Parameters
+##### Parâmetros
 
-| Name | Located in | Description | Required | Schema |
+| Nome | Localizado em | Descrição | Requirido | Esquema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| payload | body |  | Yes | [Cadastro%20de%20clientes](#Cadastro%20de%20clientes) |
+| payload | body | Dados necessários para cadastro de clientes | Sim | Cadastro de clientes |
 
 ##### Responses
 
-| Code | Description | Schema |
+| Código | Descrição | Esquema |
 | ---- | ----------- | ------ |
-| 201 | Criado com sucesso! |  |
-| 500 | Erro no servidor | [ServerError](#ServerError) |
+| 201 | Criado com sucesso! |
+| 500 | Erro no servidor | Server Error |
 
 #### GET
-##### Description:
+##### Descrição:
 
 Rota utilizada para busca de clientes,
                                ela retorna todos os clientes referentes a determinado cadastro
 
-##### Responses
+##### Respostas
 
-| Code | Description | Schema |
+| Código | Descrição | Esquema |
 | ---- | ----------- | ------ |
-| 200 | Buscado com sucesso! | [ [Buscar%20clientes](#Buscar%20clientes) ] |
-| 500 | Erro no servidor | [ServerError](#ServerError) |
+| 200 | Buscado com sucesso! | Buscar clientes |
+| 500 | Erro no servidor | Server Error |
 
 ### /clientes/{id}
 
 #### DELETE
-##### Description:
+##### Descrição:
 
 Rota utilizada para remoção de clientes,
                                    é necessário inserir o id referente ao cliente a ser removido
 
-##### Parameters
+##### Parâmetros
 
-| Name | Located in | Description | Required | Schema |
+| Nome | Localizado em | Descrição | Requirido | Esquema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| id | path |  | Yes | string |
+| id | path | Id referente ao cliente a ser deletado | Sim | string |
 
-##### Responses
+##### Respostas
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | deletado com sucesso! |  |
 | 204 | Sem conteúdo |  |
-| 500 | Erro no servidor | [ServerError](#ServerError) |
+| 500 | Erro no servidor | Server Error |
+
+
 
 ### Esquemas
 
+#### Ativos
 
-#### Ativos com os campos
-
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| Ativos com os campos |  |  |  |
+| Ativos |
+
+
 
 #### Cadastro de ativos
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| dataCadastroProduto | date | Data de cadastro do produto | Yes |
-| nomeProduto | string | Nome do produto | Yes |
-| qntProduto | integer | Quantidade do produto | Yes |
-| valorPagoProduto | number | Valor pago pelo produto | Yes |
-| tipoProduto | string | Classificação do produto. Valores: (P)eriféricos | (D)ecorações | (M)óveis | (E)letrônicos | Yes |
-| descricaoProduto | string | Descrição do produto | Yes |
+| dataCadastroProduto | date | Data de cadastro do produto | Sim |
+| nomeProduto | string | Nome do produto | Sim |
+| qntProduto | integer | Quantidade do produto | Sim |
+| valorPagoProduto | number | Valor pago pelo produto | Sim |
+| tipoProduto | string | Classificação do produto. Valores: (P)eriféricos | (D)ecorações | (M)óveis | (E)letrônicos | Sim |
+| descricaoProduto | string | Descrição do produto | Sim |
 
-#### ServerError
+#### Server Error
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| error | string | Erro referido | No |
+| error | string | Erro referido | Não |
 
-#### cliente com todos os campos
+#### Clientes
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| cliente com todos os campos |  |  |  |
+| cliente com todos os campos |
 
 #### Cadastro de clientes
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| Cadastro de clientes |  |  |  |
+| Cadastro de clientes |
 
 #### Busca de clientes
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| nome | string | Nome do cliente | Yes |
-| email | string | Email do cliente | Yes |
-| contato | integer | Número de telefone do cliente | Yes |
-| nomeEmpresa | string | Nome da empresa a qual o cliente é sócio/colaborador | Yes |
+| nome | string | Nome do cliente | Sim |
+| email | string | Email do cliente | Sim |
+| contato | integer | Número de telefone do cliente | Sim |
+| nomeEmpresa | string | Nome da empresa a qual o cliente é sócio/colaborador | Sim |
 
 #### Buscar clientes
 
-| Name | Type | Description | Required |
+| Nome | Tipo | Descrição | Requirido |
 | ---- | ---- | ----------- | -------- |
-| Buscar clientes |  |  |  |
+| Buscar clientes |
