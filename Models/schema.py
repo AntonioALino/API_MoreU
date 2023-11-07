@@ -34,7 +34,7 @@ class Clientes(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(60))
     email = Column(String(30), unique=True)
-    contato = Column(Integer)
+    contato = Column(String(11))
     nomeEmpresa = Column(String(60))
     password = Column(String(200))
 
@@ -44,23 +44,3 @@ class Clientes(Base):
         self.contato = contato
         self.nomeEmpresa = nomeEmpresa
         self.password = password
-
-class Fornecedores(Base):
-
-    def __init__(self, nomeFornecedor=None, emailFornecedor=None, contatoFornecedor=None, nomeEmpresaFornecedor=None,
-                 tipoProdutosFornecidos=None, qntProdutosFornecidos=None, ):
-        self.nomeFornecedor = nomeFornecedor
-        self.emailFornecedor = emailFornecedor
-        self.contatoFornecedor = contatoFornecedor
-        self.nomeEmpresaFornecedor = nomeEmpresaFornecedor
-        self.tipoProdutosFornecidos = tipoProdutosFornecidos
-        self.qntProtudosFornecidos = qntProdutosFornecidos
-
-    __tablename__ = 'fornecedores'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    nomeFornecedor = Column(String(60))
-    emailFornecedor = Column(String(30))
-    contatoFornecedor = Column(Integer)
-    nomeEmpresaFornecedor = Column(String(60))
-    tipoProdutosFornecidos = Column(String(60))
-    qntProdutosFornecidos = Column(Integer)
