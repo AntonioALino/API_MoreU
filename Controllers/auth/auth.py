@@ -17,5 +17,7 @@ def Auth(f):
                     return 200
             except Exception as E:
                 return 401
+            
+            return decoded
 
     return __Auth()

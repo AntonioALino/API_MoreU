@@ -24,6 +24,7 @@ serverError = ativos.model("ServerError", {
 })
 
 
+@Auth
 @ativos.route("/")
 class Ativos(Resource):
     @ativos.expect(ativosPOSTModel)
