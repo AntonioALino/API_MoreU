@@ -1,5 +1,8 @@
-from bcrypt import gensalt, hashpw
-from flask import make_response, jsonify
+import os
+
+from bcrypt import gensalt, hashpw, checkpw
+from flask import make_response, jsonify, request
+from jwt import encode
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select, delete, update
@@ -61,10 +64,12 @@ def createClientes(form):
         session.add(cliente)
         try:
             session.commit()
-            response = make_response(
-                "", 201
 
-            )
+            token = encode({"id": cliente.id}, os.environ.get("JWT_SECRET"))
+
+            request.headers = {"Authorization": f"Bearer {token}"}
+
+            response = make_response("", 201)
             response.headers["Content-Type"] = "application/json"
 
             return response
@@ -101,13 +106,13 @@ def excluirClientes(idCliente):
         return response
 
 
-def updateClientes(form):
+def updateClientes(form, user):
     form_get = loads(form)
     try:
         with Session(engine) as session:
             update_itens = (
                 update(Clientes)
-                .where(Clientes.id == form_get['id'])
+                .where(Clientes.id == user)
                 .values(nome=form_get['nome'],
                         email=form_get['email'],
                         contato=form_get['contato'],
@@ -141,27 +146,29 @@ def updateClientes(form):
         return response
 
 
-def login(email, password):
+def login(data):
+    login_data = loads(data)
     try:
         with Session(engine) as session:
-            queryRecept = select(Clientes).where(Clientes.email == email)
+            queryRecept = select(Clientes).where(Clientes.email == login_data["email"])
 
-        exec_select = session.execute(queryRecept).first()
+            exec_select = session.execute(queryRecept).first()
 
-        if (exec_select.count > 0):
-            if (exec_select[0].password):
-                pass
-        response = make_response(
-            jsonify({
-                "id": int(exec_select[0].id),
-                "dataCadastroProduto": str(exec_select[0].dataCadastroProduto),
-                "nomeProduto": str(exec_select[0].nomeProduto),
-                "qntProduto": int(exec_select[0].qntProduto),
-                "valorPagoProduto": float(exec_select[0].valorPagoProduto),
-                "tipoProduto": str(exec_select[0].tipoProduto),
-                "descricaoProduto": str(exec_select[0].descricaoProduto)
-            }), 200
-        )
+            if exec_select:
+                password = login_data["password"].encode("utf-8")
+                if checkpw(password, exec_select[0].password.encode("utf-8")):
+
+                    token = encode({"id": exec_select[0].id}, os.environ.get("JWT_SECRET"))
+
+
+                    response = make_response(jsonify({"token": token}), 200)
+
+                else:
+                    response = make_response("", 401)
+
+            else:
+                response = make_response("", 204)
+
         return response
 
     except OSError:

@@ -1,16 +1,16 @@
 from flask import make_response, jsonify
 from sqlalchemy.orm import Session
-from sqlalchemy import select, delete, update
+from sqlalchemy import select, delete, update, and_
 from Models.schema import Ativos
 from Models.database import engine
 from json import loads
 
 
-def get_ativos():
+def get_ativos(id):
     try:
         with Session(engine) as session:
 
-            ativos = select(Ativos)
+            ativos = select(Ativos).where(Ativos.fk_id_clientes == id)
 
             jsonAtivos = []
 
@@ -43,7 +43,7 @@ def get_ativos():
         return response
 
 
-def createAtivos(form):
+def createAtivos(form, id):
     form_get = loads(form)
     try:
         with Session(engine) as session:
@@ -53,7 +53,8 @@ def createAtivos(form):
                             qntProduto=form_get["qntProduto"],
                             valorPagoProduto=form_get["valorPagoProduto"],
                             tipoProduto=form_get["tipoProduto"],
-                            descricaoProduto=form_get["descricaoProduto"])
+                            descricaoProduto=form_get["descricaoProduto"],
+                            fk_id_clientes=id)
             session.add(ativos)
             session.commit()
             response = make_response(
@@ -74,11 +75,14 @@ def createAtivos(form):
         return response
 
 
-def excluirAtivos(idAtivo):
+def excluirAtivos(idAtivo, id):
     try:
         with Session(engine) as session:
 
-            delete_itens = delete(Ativos).where(Ativos.id == idAtivo)
+            delete_itens = delete(Ativos).where(and_(
+                Ativos.id == idAtivo,
+            Ativos.fk_id_clientes == id
+            ))
 
             exec_del = session.execute(delete_itens)
 
@@ -105,13 +109,13 @@ def excluirAtivos(idAtivo):
         return response
 
 
-def updateAtivos(form):
+def updateAtivos(form, id):
     form_get = loads(form)
     try:
         with Session(engine) as session:
             update_itens = (
                 update(Ativos)
-                .where(Ativos.id == form_get['id'])
+                .where(and_(Ativos.id == form_get['id'], Ativos.fk_id_clientes == id))
                 .values(dataCadastroProduto=form_get["dataCadastroProduto"],
                         nomeProduto=form_get['nomeProduto'],
                         qntProduto=form_get['qntProduto'],
@@ -137,10 +141,10 @@ def updateAtivos(form):
         return response
 
 
-def selectById(id):
+def selectById(id, idUser):
     try:
         with Session(engine) as session:
-            queryRecept = select(Ativos).where(Ativos.id == id)
+            queryRecept = select(Ativos).where(and_(Ativos.id == id, Ativos.fk_id_clientes == idUser))
 
         exec_select = session.execute(queryRecept).first()
 

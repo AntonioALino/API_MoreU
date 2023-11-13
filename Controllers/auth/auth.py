@@ -1,23 +1,38 @@
+import os
+
 from flask import request
 from jwt import decode
 from functools import wraps
 
+
 def Auth(f):
     @wraps(f)
-    def __Auth(*args, **kwargs):
-                
-        token = request.authorization
+    def decorated(*args, **kwargs):
+
+        token = None
+
+        if "Authorization" in request.headers:
+            token = request.headers["Authorization"].split(" ")[0]
         if not token:
-            return 204
+            return {
+                "message": "token not found"
+            }, 204
 
-        else: 
-            try:
-                decoded = decode(token, os.environ.get("JWT_SECRET"), algorithms=["HS256"])
-                if decoded:
-                    return 200
-            except Exception as E:
-                return 401
-            
-            return decoded
+        try:
+            data = decode(token, os.environ.JWT_SECRET, algorithms=["HS256"])
 
-    return __Auth()
+            user = data["userId"]
+
+            if user is None:
+                return {
+                    "message": "Invalid token, not permission"
+                }, 401
+
+        except Exception as E:
+            return {
+                "message": "Internal Server Error"
+            }, 500
+
+        return f(user, *args, **kwargs)
+
+    return decorated

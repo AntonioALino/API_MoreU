@@ -8,13 +8,14 @@ class Base(DeclarativeBase):
 
 class Ativos(Base):
 
-    def __init__(self, dataCadastroProduto, nomeProduto, qntProduto, valorPagoProduto, tipoProduto, descricaoProduto):
+    def __init__(self, dataCadastroProduto, nomeProduto, qntProduto, valorPagoProduto, tipoProduto, descricaoProduto, fk_id_clientes):
         self.dataCadastroProduto = dataCadastroProduto
         self.nomeProduto = nomeProduto
         self.qntProduto = qntProduto
         self.valorPagoProduto = valorPagoProduto
         self.tipoProduto = tipoProduto
         self.descricaoProduto = descricaoProduto
+        self.fk_id_clientes = fk_id_clientes
 
     __tablename__ = 'ativos'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -24,6 +25,7 @@ class Ativos(Base):
     valorPagoProduto = Column("valorPagoProduto", Double)
     tipoProduto = Column("tipoProduto", String(60))
     descricaoProduto = Column("descricaoProduto", String(60))
+    fk_id_clientes = Column("fk_id_clientes", Integer)
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.nomeProduto!r}, type={self.tipoProduto!r})"

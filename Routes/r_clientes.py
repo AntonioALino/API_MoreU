@@ -1,4 +1,5 @@
-from Controllers.clientes import get_clientes, createClientes, excluirClientes, updateClientes
+from Controllers.auth.auth import Auth
+from Controllers.clientes import get_clientes, createClientes, excluirClientes, updateClientes, login
 from flask import request
 from flask_restx import Resource, Namespace, fields
 
@@ -17,6 +18,11 @@ clientesPOSTModel = clientes.inherit("Cadastro de clientes", clientesGETModel, {
 
 clientesModel = clientes.inherit("cliente com todos os campos", clientesPOSTModel, {
         "id": fields.Integer(required=True, description="Id único do cliente", example=1)})
+
+loginModel = clientes.model("Login", {
+    "email": fields.String(required=True, description="Email do cliente", example="cliente@email.com"),
+    "password": fields.String(required=True, description="Senha do cliente", example='9Qv15).=5"^n')
+})
 
 serverError = clientes.model("ServerError", {
     "error": fields.String(description="Erro referido")
@@ -50,19 +56,29 @@ class Clientes(Resource):
     @clientes.response(204, "Sem conteúdo")
     @clientes.response(409, "Conflito. Email já cadastrado")
     @clientes.response(500, "Erro no servidor", serverError)
-    def put(self):
+    @Auth
+    def put(self, user):
         req = request.data
-        return updateClientes(req)
+        return updateClientes(req, user)
 
 
-@clientes.route('/<id>')
-class ClientesId(Resource):
-
-    @clientes.doc(description='''Rota utilizada para remoção de clientes,
-                                   é necessário inserir o id referente ao cliente a ser removido''')
+    @clientes.doc(description='''Rota utilizada para remoção de clientes''')
 
     @clientes.response(200, "deletado com sucesso!")
     @clientes.response(204, "Sem conteúdo")
     @clientes.response(500, "Erro no servidor", serverError)
-    def delete(self, id):
-        return excluirClientes(id)
+    @Auth
+    def delete(self, user):
+        return excluirClientes(user)
+
+@clientes.route("/login")
+class ClientesLogin(Resource):
+
+    @clientes.expect(loginModel)
+    @clientes.doc(description='''Rota utilizada para login de clientes,
+                                     nela é necessário informar os dados referentes ao cliente a ser autenticado''')
+    @clientes.response(201, "Autenticado com sucesso!")
+    @clientes.response(500, "Erro no servidor", serverError)
+    def post(self):
+        req = request.data
+        return login(req)

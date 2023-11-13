@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import request
 from Controllers.auth.auth import Auth
 from Controllers.ativos import get_ativos, createAtivos, excluirAtivos, updateAtivos, selectById
 from flask_restx import Resource, Namespace, fields
@@ -17,14 +17,13 @@ ativosPOSTModel = ativos.model("Cadastro de ativos", {
                                       example="Fonte com selo 80plus"),
 })
 ativosModel = ativos.inherit("Ativos com os campos", ativosPOSTModel, {
-        "id": fields.Integer(required=True, description="Id único do ativo", example=1)})
+    "id": fields.Integer(required=True, description="Id único do ativo", example=1)})
 
 serverError = ativos.model("ServerError", {
     "error": fields.String(description="Erro referido")
 })
 
 
-@Auth
 @ativos.route("/")
 class Ativos(Resource):
     @ativos.expect(ativosPOSTModel)
@@ -32,15 +31,17 @@ class Ativos(Resource):
                                nela é necessário informar os dados referentes ao ativo a ser cadastro''')
     @ativos.response(201, "Criado com sucesso!")
     @ativos.response(500, "Erro no servidor", serverError)
-    def post(self):
-        return createAtivos(request.data)
+    @Auth
+    def post(self, user):
+        return createAtivos(request.data, user)
 
     @ativos.doc(description='''Rota utilizada para busca de ativos,
                                ela retorna todos os ativos referentes a determinado cadastro''')
     @ativos.response(200, "Buscado com sucesso!", [ativosModel])
     @ativos.response(500, "Erro no servidor", serverError)
-    def get(self):
-        return get_ativos()
+    @Auth
+    def get(self, user):
+        return get_ativos(user)
 
     @ativos.expect(ativosModel)
     @ativos.response(200, "Alterado com sucesso!")
@@ -48,8 +49,9 @@ class Ativos(Resource):
     @ativos.response(500, "Erro no servidor", serverError)
     @ativos.doc(description='''Rota utilizada para edição de ativos,
                                  nela é necessário informar os dados referentes ao ativo a ser editado''')
-    def put(self):
-        return updateAtivos(request.data)
+    @Auth
+    def put(self, user):
+        return updateAtivos(request.data, user)
 
 
 @ativos.route("/<id>")
@@ -59,14 +61,15 @@ class AtivosId(Resource):
     @ativos.response(200, "Buscado com sucesso!", ativosModel)
     @ativos.response(204, "Sem conteúdo")
     @ativos.response(500, "Erro no servidor", serverError)
-    def get(self, id):
-        return selectById(id)
+    @Auth
+    def get(self, id, user):
+        return selectById(id, user)
 
     @ativos.doc(description='''Rota utilizada para remoção de ativos,
                                    é necessário inserir o id referente ao ativo a ser removido''')
-
     @ativos.response(200, "deletado com sucesso!")
     @ativos.response(204, "Sem conteúdo")
     @ativos.response(500, "Erro no servidor", serverError)
-    def delete(self, id):
-        return excluirAtivos(id)
+    @Auth
+    def delete(self, id, user):
+        return excluirAtivos(id, user)
