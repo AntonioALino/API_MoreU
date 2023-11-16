@@ -65,11 +65,8 @@ def createClientes(form):
         try:
             session.commit()
 
-            token = encode({"id": cliente.id}, os.environ.get("JWT_SECRET"))
-
-            request.headers = {"Authorization": f"Bearer {token}"}
-
-            response = make_response("", 201)
+            token = encode({"userId": cliente.id}, os.environ.get("JWT_SECRET"))
+            response = make_response(jsonify({"token": token}), 201)
             response.headers["Content-Type"] = "application/json"
 
             return response
@@ -158,7 +155,7 @@ def login(data):
                 password = login_data["password"].encode("utf-8")
                 if checkpw(password, exec_select[0].password.encode("utf-8")):
 
-                    token = encode({"id": exec_select[0].id}, os.environ.get("JWT_SECRET"))
+                    token = encode({"userId": exec_select[0].id}, os.environ.get("JWT_SECRET"))
 
 
                     response = make_response(jsonify({"token": token}), 200)

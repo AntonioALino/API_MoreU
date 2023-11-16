@@ -48,17 +48,17 @@ def createAtivos(form, id):
     try:
         with Session(engine) as session:
 
-            ativos = Ativos(dataCadastroProduto=form_get["dataCadastroProduto"],
-                            nomeProduto=form_get["nomeProduto"],
-                            qntProduto=form_get["qntProduto"],
-                            valorPagoProduto=form_get["valorPagoProduto"],
-                            tipoProduto=form_get["tipoProduto"],
-                            descricaoProduto=form_get["descricaoProduto"],
-                            fk_id_clientes=id)
-            session.add(ativos)
-            session.commit()
+            # ativos = Ativos(dataCadastroProduto=form_get["dataCadastroProduto"],
+            #                 nomeProduto=form_get["nomeProduto"],
+            #                 qntProduto=form_get["qntProduto"],
+            #                 valorPagoProduto=form_get["valorPagoProduto"],
+            #                 tipoProduto=form_get["tipoProduto"],
+            #                 descricaoProduto=form_get["descricaoProduto"],
+            #                 fk_id_clientes=id)
+            # session.add(ativos)
+            # session.commit()
             response = make_response(
-                "", 201
+                jsonify({"aa": str(id)}), 201
 
             )
         response.headers["Content-Type"] = "application/json"
