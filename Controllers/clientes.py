@@ -176,3 +176,25 @@ def login(data):
         response.headers["Content-Type"] = "application/json"
 
         return response
+
+
+def getClienteById(id):
+
+    try:
+        with Session(engine) as session:
+            query = select(Clientes).where(Clientes.id == id)
+
+            exec = session.execute(query).first()
+
+            if exec:
+                response = make_response(jsonify({"nomeUsuario": exec[0].nome}), 200)
+
+            else:
+                response = make_response("", 204)
+
+            return response
+
+    except Exception as E:
+        response = make_response(jsonify({"error": E}), 500)
+
+        return response

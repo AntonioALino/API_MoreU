@@ -32,7 +32,7 @@ class Ativos(Resource):
     @ativos.response(201, "Criado com sucesso!")
     @ativos.response(500, "Erro no servidor", serverError)
     @Auth
-    def post(self, user):
+    def post(user, self):
         return createAtivos(request.data, user)
 
     @ativos.doc(description='''Rota utilizada para busca de ativos,
@@ -40,7 +40,7 @@ class Ativos(Resource):
     @ativos.response(200, "Buscado com sucesso!", [ativosModel])
     @ativos.response(500, "Erro no servidor", serverError)
     @Auth
-    def get(self, user):
+    def get(user, self):
         return get_ativos(user)
 
     @ativos.expect(ativosModel)
@@ -50,7 +50,7 @@ class Ativos(Resource):
     @ativos.doc(description='''Rota utilizada para edição de ativos,
                                  nela é necessário informar os dados referentes ao ativo a ser editado''')
     @Auth
-    def put(self, user):
+    def put(user, self):
         return updateAtivos(request.data, user)
 
 
@@ -62,7 +62,7 @@ class AtivosId(Resource):
     @ativos.response(204, "Sem conteúdo")
     @ativos.response(500, "Erro no servidor", serverError)
     @Auth
-    def get(self, id, user):
+    def get(user, self, id):
         return selectById(id, user)
 
     @ativos.doc(description='''Rota utilizada para remoção de ativos,
@@ -71,5 +71,5 @@ class AtivosId(Resource):
     @ativos.response(204, "Sem conteúdo")
     @ativos.response(500, "Erro no servidor", serverError)
     @Auth
-    def delete(self, id, user):
+    def delete(user, self, id):
         return excluirAtivos(id, user)

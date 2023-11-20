@@ -1,7 +1,7 @@
 from flask import make_response, jsonify
 from sqlalchemy.orm import Session
 from sqlalchemy import select, delete, update, and_
-from Models.schema import Ativos
+from Models.schema import Ativos, Clientes
 from Models.database import engine
 from json import loads
 
@@ -11,7 +11,6 @@ def get_ativos(id):
         with Session(engine) as session:
 
             ativos = select(Ativos).where(Ativos.fk_id_clientes == id)
-
             jsonAtivos = []
 
             for ativo in session.scalars(ativos):
@@ -48,17 +47,17 @@ def createAtivos(form, id):
     try:
         with Session(engine) as session:
 
-            # ativos = Ativos(dataCadastroProduto=form_get["dataCadastroProduto"],
-            #                 nomeProduto=form_get["nomeProduto"],
-            #                 qntProduto=form_get["qntProduto"],
-            #                 valorPagoProduto=form_get["valorPagoProduto"],
-            #                 tipoProduto=form_get["tipoProduto"],
-            #                 descricaoProduto=form_get["descricaoProduto"],
-            #                 fk_id_clientes=id)
-            # session.add(ativos)
-            # session.commit()
+            ativos = Ativos(dataCadastroProduto=form_get["dataCadastroProduto"],
+                            nomeProduto=form_get["nomeProduto"],
+                            qntProduto=form_get["qntProduto"],
+                            valorPagoProduto=form_get["valorPagoProduto"],
+                            tipoProduto=form_get["tipoProduto"],
+                            descricaoProduto=form_get["descricaoProduto"],
+                            fk_id_clientes=id)
+            session.add(ativos)
+            session.commit()
             response = make_response(
-                jsonify({"aa": str(id)}), 201
+                "", 201
 
             )
         response.headers["Content-Type"] = "application/json"
@@ -80,8 +79,7 @@ def excluirAtivos(idAtivo, id):
         with Session(engine) as session:
 
             delete_itens = delete(Ativos).where(and_(
-                Ativos.id == idAtivo,
-            Ativos.fk_id_clientes == id
+                Ativos.id == idAtivo
             ))
 
             exec_del = session.execute(delete_itens)

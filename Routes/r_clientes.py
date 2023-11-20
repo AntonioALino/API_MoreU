@@ -1,5 +1,5 @@
 from Controllers.auth.auth import Auth
-from Controllers.clientes import get_clientes, createClientes, excluirClientes, updateClientes, login
+from Controllers.clientes import get_clientes, createClientes, excluirClientes, updateClientes, login, getClienteById
 from flask import request
 from flask_restx import Resource, Namespace, fields
 
@@ -82,3 +82,11 @@ class ClientesLogin(Resource):
     def post(self):
         req = request.data
         return login(req)
+
+
+@clientes.route("/id")
+class ClientesId(Resource):
+
+    @Auth
+    def get(user, self):
+        return getClienteById(user)

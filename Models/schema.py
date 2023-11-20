@@ -1,5 +1,5 @@
-from sqlalchemy import Integer, Double, String, Date, Column
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Integer, Double, String, Date, Column, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, relationship
 
 
 class Base(DeclarativeBase):
@@ -25,7 +25,8 @@ class Ativos(Base):
     valorPagoProduto = Column("valorPagoProduto", Double)
     tipoProduto = Column("tipoProduto", String(60))
     descricaoProduto = Column("descricaoProduto", String(60))
-    fk_id_clientes = Column("fk_id_clientes", Integer)
+    fk_id_clientes = Column(ForeignKey("clientes.id"))
+    cliente = relationship("Clientes")
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.nomeProduto!r}, type={self.tipoProduto!r})"

@@ -25,7 +25,6 @@ def Auth(f):
             data = decode(token, os.environ.get("JWT_SECRET"), algorithms=["HS256"])
 
             user = data["userId"]
-
             if user is None:
                 return {
                     "message": "Invalid token, not permission"
