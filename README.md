@@ -156,7 +156,7 @@ Rota utilizada para busca de ativos,
 ##### Respostas
 
 | Código | Descrição | Esquema |
-| ---- | ----------- | ------ |
+| ---- | ----------- | ------- |
 | 200 | Buscado com sucesso! | Ativos |
 | 500 | Erro no servidor | Server Error |
 
