@@ -81,7 +81,10 @@ def createClientes(form):
         except IntegrityError:
             # Em caso de erro de integridade (email duplicado), retorna uma resposta de conflito com status 409
             session.rollback()
-            return make_response({"error": "This email is already being used"}, 409)
+            return make_response("", 409)
+
+        except OSError:
+            return make_response({"error": OSError}, 500)
 
 # Função para excluir um cliente com base no ID do cliente
 def excluirClientes(idCliente):

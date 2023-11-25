@@ -52,6 +52,7 @@ class Clientes(Resource):
     @clientes.doc(description='''Rota utilizada para cadastro de clientes,
                                  nela é necessário informar os dados referentes ao cliente a ser cadastro''')
     @clientes.response(201, "Criado com sucesso!")
+    @clientes.response(409, "Conflito. Email já cadastrado")
     @clientes.response(500, "Erro no servidor", serverError)
     def post(self):
         req = request.data
@@ -88,7 +89,9 @@ class ClientesLogin(Resource):
     @clientes.expect(loginModel)
     @clientes.doc(description='''Rota utilizada para login de clientes,
                                      nela é necessário informar os dados referentes ao cliente a ser autenticado''')
-    @clientes.response(201, "Autenticado com sucesso!")
+    @clientes.response(401, "Email/senha incorreto")
+    @clientes.response(200, "Autenticado com sucesso!")
+    @clientes.response(204, "Sem conteúdo")
     @clientes.response(500, "Erro no servidor", serverError)
     def post(self):
         req = request.data
@@ -98,6 +101,9 @@ class ClientesLogin(Resource):
 @clientes.route("/id")
 class ClientesId(Resource):
     # Rota para buscar cliente pelo ID
+    @clientes.response(200, "Autenticado com sucesso!")
+    @clientes.response(204, "Sem conteúdo")
+    @clientes.response(500, "Erro no servidor", serverError)
     @Auth
     def get(user, self):
         return getClienteById(user)
